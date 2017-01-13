@@ -195,7 +195,7 @@ function rentalPrice(rental)
   } else if (dayDiff > 10) {
     priceDay = priceDay - priceDay*50/100;
   }
-  rental.price = dayDiff*priceDay+rental.distance*priceKm;
+  rental.price = dayDiff*priceDay+rental.distance*priceKm + deductibleOption(rental);
   //console.log(rental.price);
 }
 function diffDate(rental){
@@ -216,10 +216,11 @@ function allRentalPrice(rentals){
 
 // ----------- Begining exercise 3 ---------------
 function commission(rental){
-  var commission = rental.price - rental.price*70/100;
+  var rentalCom = rental.price- deductibleOption(rental)
+  var commission = rentalCom - rentalCom*70/100;
   rental.commission.insurance = commission/2;
   rental.commission.assistance = diffDate(rental);
-  rental.commission.drivy = commission - diffDate(rental) - commission/2;
+  rental.commission.drivy = commission - diffDate(rental) - commission/2 + deductibleOption(rental);
 }
 
 function allCommission(rentals){
@@ -228,3 +229,13 @@ function allCommission(rentals){
   }
 }
 // ------------ Ending exercise 3 ---------------
+
+// ------------ Begining exercise 4 --------------
+function deductibleOption (rental){
+  if(rental.options.deductibleReduction === true){
+    return diffDate(rental)*4;
+  } else {
+    return 0;
+  }
+}
+// ------------ Ending exercise 4--------------
