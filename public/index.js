@@ -169,19 +169,15 @@ console.log(cars);
 console.log(rentals);
 console.log(actors);
 console.log(rentalModifications);
-allRentalPrice(rentals); // Exercise 1 - Euro-Kilometers
-
+allRentalPrice(rentals); // Exercise 1 - Euro-Kilometers & Exercise 2 - Drive more, pay less
+allCommission(rentals); // Exercise 3 - Give me all your money
 // ---------- Begining exercise 1 & 2 ------------
 function rentalPrice(rental)
 {
   var priceDay=0;
   var priceKm=0;
-  var dayReturn = new Date(rental.returnDate);
-  var dayPick = new Date(rental.pickupDate);
 
-  var timeDiff = Math.abs(dayReturn.getTime()-dayPick.getTime());
-  var dayDiff = Math.ceil(timeDiff / (1000*3600*24))+1;
-
+  var dayDiff = diffDate(rental);
   var carID=rental.carId;
 
   for (var i = 0; i < cars.length; i++) {
@@ -191,22 +187,44 @@ function rentalPrice(rental)
       priceKm=cars[i].pricePerKm;
     }
   }
-
-  rental.price = dayDiff*priceDay+rental.distance*priceKm;
   if(dayDiff > 1 && dayDiff <= 4)
   {
-    rental.price = rental.price - rental.price*10/100;
+    priceDay = priceDay - priceDay*10/100;
   } else if (dayDiff > 4 && dayDiff <=10) {
-    rental.price = rental.price - rental.price*30/100;
+    priceDay = priceDay - priceDay*30/100;
   } else if (dayDiff > 10) {
-    rental.price = rental.price - rental.price*50/100;
+    priceDay = priceDay - priceDay*50/100;
   }
+  rental.price = dayDiff*priceDay+rental.distance*priceKm;
   //console.log(rental.price);
 }
+function diffDate(rental){
+  var dayReturn = new Date(rental.returnDate);
+  var dayPick = new Date(rental.pickupDate);
 
+  var timeDiff = Math.abs(dayReturn.getTime()-dayPick.getTime());
+  var dayDiff = Math.ceil(timeDiff / (1000*3600*24))+1;
+
+  return dayDiff;
+}
 function allRentalPrice(rentals){
   for (var i = 0; i < rentals.length; i++) {
     rentalPrice(rentals[i]);
   }
 }
 // ----------- Ending exercise 1 & 2 --------------
+
+// ----------- Begining exercise 3 ---------------
+function commission(rental){
+  var commission = rental.price - rental.price*70/100;
+  rental.commission.insurance = commission/2;
+  rental.commission.assistance = diffDate(rental);
+  rental.commission.drivy = commission - diffDate(rental) - commission/2;
+}
+
+function allCommission(rentals){
+  for (var i = 0; i < rentals.length; i++) {
+    commission(rentals[i]);
+  }
+}
+// ------------ Ending exercise 3 ---------------
