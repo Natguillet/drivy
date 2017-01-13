@@ -169,3 +169,36 @@ console.log(cars);
 console.log(rentals);
 console.log(actors);
 console.log(rentalModifications);
+allRentalPrice(rentals); // Exercise 1 - Euro-Kilometers
+
+// ---------- Begining exercise 1------------
+function rentalPrice(rental)
+{
+  var priceDay=0;
+  var priceKm=0;
+  var dayReturn = new Date(rental.returnDate);
+  var dayPick = new Date(rental.pickupDate);
+
+  var timeDiff = Math.abs(dayReturn.getTime()-dayPick.getTime());
+  var dayDiff = Math.ceil(timeDiff / (1000*3600*24))+1;
+
+  var carID=rental.carId;
+
+  for (var i = 0; i < cars.length; i++) {
+    if(carID==cars[i].id)
+    {
+      priceDay= cars[i].pricePerDay;
+      priceKm=cars[i].pricePerKm;
+    }
+  }
+
+  rental.price = dayDiff*priceDay+rental.distance*priceKm;
+  //console.log(rental.price);
+}
+
+function allRentalPrice(rentals){
+  for (var i = 0; i < rentals.length; i++) {
+    rentalPrice(rentals[i]);
+  }
+}
+// ----------- Ending exercise 1 --------------
