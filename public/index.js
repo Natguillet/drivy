@@ -171,7 +171,7 @@ console.log(actors);
 console.log(rentalModifications);
 allRentalPrice(rentals); // Exercise 1 - Euro-Kilometers
 
-// ---------- Begining exercise 1------------
+// ---------- Begining exercise 1 & 2 ------------
 function rentalPrice(rental)
 {
   var priceDay=0;
@@ -193,6 +193,14 @@ function rentalPrice(rental)
   }
 
   rental.price = dayDiff*priceDay+rental.distance*priceKm;
+  if(dayDiff > 1 && dayDiff <= 4)
+  {
+    rental.price = rental.price - rental.price*10/100;
+  } else if (dayDiff > 4 && dayDiff <=10) {
+    rental.price = rental.price - rental.price*30/100;
+  } else if (dayDiff > 10) {
+    rental.price = rental.price - rental.price*50/100;
+  }
   //console.log(rental.price);
 }
 
@@ -201,4 +209,4 @@ function allRentalPrice(rentals){
     rentalPrice(rentals[i]);
   }
 }
-// ----------- Ending exercise 1 --------------
+// ----------- Ending exercise 1 & 2 --------------
