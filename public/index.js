@@ -171,6 +171,7 @@ console.log(actors);
 console.log(rentalModifications);
 allRentalPrice(rentals); // Exercise 1 - Euro-Kilometers & Exercise 2 - Drive more, pay less
 allCommission(rentals); // Exercise 3 - Give me all your money
+debitCreditAll(actors);
 // ---------- Begining exercise 1 & 2 ------------
 function rentalPrice(rental)
 {
@@ -221,6 +222,7 @@ function commission(rental){
   rental.commission.insurance = commission/2;
   rental.commission.assistance = diffDate(rental);
   rental.commission.drivy = commission - diffDate(rental) - commission/2 + deductibleOption(rental);
+  return commission;
 }
 
 function allCommission(rentals){
@@ -239,3 +241,41 @@ function deductibleOption (rental){
   }
 }
 // ------------ Ending exercise 4--------------
+// ------------ Debit for driver --------------
+function debitDriver(actor)
+{
+  for (var i = 0; i < rentals.length; i++) {
+    if(actor.rentalId===rentals[i].id)
+    {
+      for (var j = 0; j < actor.payment.length; j++) {
+        if(actor.payment[j].who === "driver")
+        {
+          actor.payment[j].amount = rentals[i].price;
+        }
+         else if(actor.payment[j].who === "owner")
+        {
+          actor.payment[j].amount = rentals[i].price - commission(rentals[i]) -deductibleOption(rentals[i]);
+        }
+        else if(actor.payment[j].who === "insurance")
+        {
+          actor.payment[j].amount = rentals[i].commission.insurance;
+        }
+        else if(actor.payment[j].who === "assistance")
+        {
+          actor.payment[j].amount = rentals[i].commission.assistance;
+        }
+        else if(actor.payment[j].who === "drivy")
+        {
+          actor.payment[j].amount = rentals[i].commission.drivy;
+        }
+      }
+    }
+  }
+}
+
+function debitCreditAll (actors)
+{
+  for (var i = 0; i < actors.length; i++) {
+    debitDriver(actors[i]);
+  }
+}
